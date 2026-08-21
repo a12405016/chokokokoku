@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>彫刻資料館 — 常設室</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --stone-950:#121110;
+    --stone-900:#1c1a18;
+    --stone-850:#221f1c;
+    --marble:#efe8db;
+    --marble-dim:#b8ada0;
+    --bronze:#b2864f;
+    --bronze-bright:#d9a862;
+    --patina:#4f7c6d;
+    --gold:#e6c369;
+    --line:rgba(239,232,219,0.12);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ color-scheme:dark; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 15% 0%, rgba(178,134,79,0.10), transparent 50%),
+      radial-gradient(circle at 85% 100%, rgba(79,124,109,0.12), transparent 50%),
+      var(--stone-950);
+    color:var(--marble);
+    font-family:'Inter', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding:clamp(28px, 6vw, 64px) 20px 100px;
+  }
+
+  header{
+    max-width:920px;
+    margin:0 auto 52px;
+    text-align:center;
+  }
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.24em;
+    text-transform:uppercase;
+    color:var(--bronze-bright);
+    margin:0 0 14px;
+  }
+
+  h1{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:clamp(32px, 6vw, 48px);
+    margin:0 0 12px;
+    letter-spacing:0.01em;
+  }
+
+  header p{
+    color:var(--marble-dim);
+    font-size:14.5px;
+    max-width:480px;
+    margin:0 auto;
+    line-height:1.8;
+  }
+
+  .gallery{
+    max-width:920px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(230px, 1fr));
+    gap:22px;
+  }
+
+  .card{
+    background:var(--stone-900);
+    border:1px solid var(--line);
+    border-radius:3px;
+    overflow:hidden;
+    text-align:left;
+  }
+
+  .card figure{ margin:0; }
+
+  .card img{
+    width:100%;
+    aspect-ratio:4/5;
+    object-fit:cover;
+    display:block;
+    filter:grayscale(15%);
+  }
+
+  .card .body{ padding:18px 18px 20px; }
+
+  .card h3{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:19px;
+    margin:0 0 4px;
+  }
+
+  .card p{
+    margin:0;
+    font-size:12.5px;
+    color:var(--marble-dim);
+    letter-spacing:0.02em;
+  }
+
+  /* ---- 未解放時のプレースホルダー ---- */
+  .locked-card{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    padding:40px 20px;
+    text-align:center;
+    border-style:dashed;
+    border-color:var(--line);
+    color:var(--marble-dim);
+  }
+
+  .locked-card .icon{
+    width:34px; height:34px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+    font-size:14px;
+  }
+
+  .locked-card p{ font-size:12.5px; max-width:240px; line-height:1.7; }
+
+  /* 逆方向(資料館 → 入館券サイト)のリンクは許可されている */
+  .locked-card a{
+    color:var(--bronze-bright);
+    text-decoration:none;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.06em;
+    border-bottom:1px solid rgba(217,168,98,0.4);
+    padding-bottom:1px;
+  }
+
+  /* ---- 新セクション: 特別収蔵室 (index.html検知で出現) ---- */
+  #reveal-section{
+    max-width:920px;
+    margin:44px auto 0;
+  }
+
+  #reveal-section.is-hidden{ display:none; }
+
+  .reveal-panel{
+    border:1px solid rgba(230,195,105,0.4);
+    border-radius:4px;
+    background:linear-gradient(160deg, var(--stone-850), var(--stone-900));
+    padding:clamp(24px, 5vw, 40px);
+    display:grid;
+    grid-template-columns:220px 1fr;
+    gap:28px;
+    align-items:center;
+    box-shadow:0 0 0 1px rgba(230,195,105,0.06), 0 24px 50px rgba(0,0,0,0.4);
+  }
+
+  @media (max-width:640px){
+    .reveal-panel{ grid-template-columns:1fr; }
+  }
+
+  .reveal-panel img{
+    width:100%;
+    aspect-ratio:4/5;
+    object-fit:cover;
+    border-radius:3px;
+  }
+
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10px;
+    letter-spacing:0.12em;
+    color:var(--gold);
+    background:rgba(230,195,105,0.1);
+    border:1px solid rgba(230,195,105,0.35);
+    padding:4px 9px;
+    border-radius:20px;
+    margin-bottom:12px;
+  }
+
+  .badge::before{
+    content:"";
+    width:5px; height:5px;
+    border-radius:50%;
+    background:var(--gold);
+  }
+
+  .reveal-panel h2{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:clamp(22px,4vw,28px);
+    margin:0 0 8px;
+  }
+
+  .reveal-panel .maker{
+    font-size:12.5px;
+    color:var(--marble-dim);
+    margin:0 0 14px;
+  }
+
+  .reveal-panel .desc{
+    font-size:13.5px;
+    color:var(--marble-dim);
+    line-height:1.8;
+    margin:0;
+  }
+
+  @keyframes reveal{
+    0%{ opacity:0; transform:translateY(14px) scale(0.98); }
+    100%{ opacity:1; transform:translateY(0) scale(1); }
+  }
+  #reveal-section.is-revealed .reveal-panel{
+    animation:reveal 0.6s cubic-bezier(.2,.7,.3,1) both;
+  }
+
+  /* ---- 認証トースト(別タブでの検知時のみ表示) ---- */
+  #toast{
+    position:fixed;
+    top:20px;
+    left:50%;
+    transform:translate(-50%, -140%);
+    background:var(--stone-900);
+    border:1px solid rgba(230,195,105,0.4);
+    color:var(--marble);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:0.04em;
+    padding:11px 18px;
+    border-radius:20px;
+    box-shadow:0 12px 30px rgba(0,0,0,0.4);
+    transition:transform 0.5s cubic-bezier(.2,.8,.3,1);
+    z-index:10;
+    white-space:nowrap;
+  }
+  #toast.show{ transform:translate(-50%, 0); }
+  #toast span{ color:var(--gold); }
+
+  footer{
+    max-width:920px;
+    margin:56px auto 0;
+    text-align:center;
+  }
+
+  footer .hint{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:0.05em;
+    color:rgba(184,173,160,0.5);
+    line-height:1.8;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    #reveal-section.is-revealed .reveal-panel{ animation:none; }
+    #toast{ transition:none; }
+  }
+</style>
+</head>
+<body>
+
+  <div id="toast" role="status" aria-live="polite">入館券サイトが開かれました — <span>特別収蔵室</span>を公開しました</div>
+
+  <header>
+    <p class="eyebrow">Sculpture Archive · Permanent Room</p>
+    <h1>彫刻資料館</h1>
+    <p>常時公開されている所蔵品のほか、入館券サイトが開かれている間は特別収蔵室が公開されます。</p>
+  </header>
+
+  <section class="gallery" id="gallery">
+    <!-- 常時表示される作品(実在の彫刻家名を出さない、架空の常設展示として掲載) -->
+    <article class="card">
+      <figure>
+        <img src="https://images.unsplash.com/photo-1772617616268-a2f27d194fce?w=500&q=80" alt="常設展示室に並ぶ石彫刻群">
+      </figure>
+      <div class="body">
+        <h3>静止の間</h3>
+        <p>常設展示 · 作者不詳</p>
+      </div>
+    </article>
+
+    <!-- 未解放時のプレースホルダー(index.htmlへのリンクは逆方向なので許可) -->
+    <article class="card locked-card" id="locked-placeholder">
+      <span class="icon">?</span>
+      <p>特別収蔵室は、入館券サイトを開いている間だけ公開されます。</p>
+      <a href="index.html">入館券サイトを開く</a>
+    </article>
+  </section>
+
+  <!-- 新セクション: index.html検知時のみ出現する特別収蔵室 -->
+  <section id="reveal-section" class="is-hidden">
+    <div class="reveal-panel">
+      <img src="https://images.unsplash.com/photo-1561839561-b13bcfe95249?w=500&q=80" alt="特別公開の黄金の勝利神像">
+      <div>
+        <span class="badge">Live · 入館検知</span>
+        <h2>黄金の勝利神像</h2>
+        <p class="maker">特別収蔵室 — 常設室 別棟</p>
+        <p class="desc">入館券サイトが開かれたことを検知して自動的に公開されています。ページを移動しなくても、別タブで検知した瞬間に反映されます。</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p class="hint">この解放状態は自動判定です。入館券サイトのタブを閉じると自動的にロックされます。</p>
+  </footer>
+
+<script>
+(function () {
+  const STORAGE_KEY = 'sculpture_heartbeat';
+  const STALE_AFTER_MS = 2500; // 心拍(1秒間隔)が2.5秒途絶えたら「閉じられた」とみなす
+  const POLL_INTERVAL_MS = 700;
+
+  const revealSection = document.getElementById('reveal-section');
+  const placeholder = document.getElementById('locked-placeholder');
+  const toast = document.getElementById('toast');
+
+  function isFresh() {
+    try {
+      const t = localStorage.getItem(STORAGE_KEY);
+      if (!t) return false;
+      return (Date.now() - Number(t)) < STALE_AFTER_MS;
+    } catch (e) {
+      return false; // localStorageが使えない環境ではロック状態のまま表示
+    }
+  }
+
+  function render(showToastOnReveal) {
+    const unlocked = isFresh();
+    const wasRevealed = revealSection.classList.contains('is-revealed');
+
+    revealSection.classList.toggle('is-hidden', !unlocked);
+    placeholder.hidden = unlocked;
+
+    if (unlocked) {
+      revealSection.classList.add('is-revealed');
+      if (showToastOnReveal && !wasRevealed) {
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3200);
+      }
+    } else {
+      revealSection.classList.remove('is-revealed');
+    }
+  }
+
+  // 1. 初回表示: 現在の状態をそのまま反映(トーストは出さない)
+  render(false);
+
+  // 2. 即時検知: 別タブで index.html が信号を送る/消すたびに storage イベントが発火する
+  window.addEventListener('storage', (event) => {
+    if (event.key === STORAGE_KEY) {
+      render(true);
+    }
+  });
+
+  // 3. 定期チェック: storage イベントが発火しないケース(強制終了・スリープ等)
+  //    でも、心拍が古くなっていれば必ずロック状態へ戻す
+  setInterval(() => render(false), POLL_INTERVAL_MS);
+
+  // 4. このタブ自身を閉じるときも念のため信号をクリア
+  window.addEventListener('pagehide', () => {
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+  });
+})();
+</script>
+
+</body>
+</html>

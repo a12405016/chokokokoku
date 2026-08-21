@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>入館の刻印 — 彫刻資料館</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --stone-950:#121110;
+    --stone-900:#1c1a18;
+    --marble:#efe8db;
+    --marble-dim:#b8ada0;
+    --bronze:#b2864f;
+    --bronze-bright:#d9a862;
+    --patina:#4f7c6d;
+    --line:rgba(239,232,219,0.14);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ color-scheme:dark; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:32px 20px;
+    background:
+      radial-gradient(circle at 20% -10%, rgba(178,134,79,0.16), transparent 55%),
+      radial-gradient(circle at 90% 110%, rgba(79,124,109,0.14), transparent 55%),
+      var(--stone-950);
+    color:var(--marble);
+    font-family:'Inter', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .ticket{
+    position:relative;
+    width:min(440px, 100%);
+    background:var(--stone-900);
+    border:1px solid var(--line);
+    border-radius:2px;
+    padding:clamp(32px, 6vw, 52px) clamp(28px, 6vw, 44px);
+    text-align:center;
+    overflow:hidden;
+  }
+
+  .ticket::before, .ticket::after{
+    content:"";
+    position:absolute;
+    left:0; right:0;
+    height:1px;
+    background-image:linear-gradient(to right, var(--line) 60%, transparent 0%);
+    background-size:10px 1px;
+    background-repeat:repeat-x;
+  }
+  .ticket::before{ top:0; }
+  .ticket::after{ bottom:0; }
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.22em;
+    color:var(--bronze-bright);
+    text-transform:uppercase;
+    margin:0 0 18px;
+  }
+
+  h1{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:clamp(26px, 5vw, 34px);
+    line-height:1.35;
+    margin:0 0 16px;
+    letter-spacing:0.01em;
+  }
+
+  p.lead{
+    color:var(--marble-dim);
+    font-size:14.5px;
+    line-height:1.8;
+    margin:0 0 34px;
+  }
+
+  .seal-wrap{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
+    margin-bottom:8px;
+  }
+
+  /* このボタンはリンクではなく、刻印を再送するための演出用トリガー */
+  .seal{
+    --size:112px;
+    position:relative;
+    width:var(--size);
+    height:var(--size);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:none;
+    cursor:pointer;
+    color:var(--stone-950);
+    background:radial-gradient(circle at 32% 28%, var(--bronze-bright), var(--bronze) 62%, #8a6539 100%);
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:14px;
+    letter-spacing:0.04em;
+    box-shadow:0 10px 26px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(255,255,255,0.15);
+    transition:transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .seal::before{
+    content:"";
+    position:absolute;
+    inset:-9px;
+    border-radius:50%;
+    border:1px solid rgba(178,134,79,0.5);
+  }
+
+  .seal::after{
+    content:"";
+    position:absolute;
+    inset:-9px;
+    border-radius:50%;
+    border:1px solid rgba(178,134,79,0.28);
+    animation:ring-pulse 2.6s ease-out infinite;
+  }
+
+  @keyframes ring-pulse{
+    0%{ transform:scale(1); opacity:0.9; }
+    100%{ transform:scale(1.35); opacity:0; }
+  }
+
+  .seal:hover{
+    transform:translateY(-2px);
+    box-shadow:0 14px 30px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.2);
+  }
+
+  .seal:active{ transform:translateY(0) scale(0.97); }
+
+  .seal:focus-visible{
+    outline:2px solid var(--patina);
+    outline-offset:5px;
+  }
+
+  .caption{
+    font-size:12px;
+    color:var(--marble-dim);
+    letter-spacing:0.02em;
+    min-height:16px;
+  }
+
+  .caption.confirmed{ color:var(--bronze-bright); }
+
+  .footnote{
+    margin-top:36px;
+    padding-top:20px;
+    border-top:1px solid var(--line);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:0.06em;
+    color:rgba(184,173,160,0.55);
+    line-height:1.9;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .seal::after{ animation:none; }
+    .seal{ transition:none; }
+  }
+</style>
+</head>
+<body>
+
+  <main class="ticket">
+    <p class="eyebrow">Sculpture Archive · Admission</p>
+    <h1>刻印はすでに<br>発行されています</h1>
+    <p class="lead">
+      このページを開いた瞬間、常設室(資料館サイト)に<br>
+      特別収蔵室が公開されます。移動の必要はありません。
+    </p>
+
+    <div class="seal-wrap">
+      <!-- リンクではなくボタン。押しても他ページへは遷移しない -->
+      <button type="button" class="seal" id="stamp-btn" aria-describedby="stamp-caption">
+        刻印済み
+      </button>
+      <span class="caption" id="stamp-caption">資料館サイトを開いていれば、そのまま反映されます</span>
+    </div>
+
+    <p class="footnote">
+      No. 0417 — この刻印は、このページを開いている間だけ有効です。<br>
+      タブを閉じると、資料館サイト側は自動的にロックされます。
+    </p>
+  </main>
+
+<script>
+(function () {
+  const STORAGE_KEY = 'sculpture_heartbeat';
+  const BEAT_INTERVAL_MS = 1000;
+
+  const btn = document.getElementById('stamp-btn');
+  const caption = document.getElementById('stamp-caption');
+  let beatTimer = null;
+
+  function beat() {
+    try {
+      // 値は毎回変わるタイムスタンプ。これにより、たとえ前回と
+      // 同じ状態でも他タブの storage イベントが確実に発火する。
+      localStorage.setItem(STORAGE_KEY, String(Date.now()));
+    } catch (e) {
+      console.warn('刻印の送信に失敗しました:', e);
+    }
+  }
+
+  function clearBeat() {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (e) {}
+  }
+
+  // 1. ページを開いた瞬間に発行し、以後は生きている間ずっと信号を送り続ける
+  beat();
+  beatTimer = setInterval(beat, BEAT_INTERVAL_MS);
+
+  // 2. タブを閉じる/離れる瞬間に信号を即座に消す(資料館側が即反応する)
+  function stopAndClear() {
+    if (beatTimer) clearInterval(beatTimer);
+    clearBeat();
+  }
+  window.addEventListener('pagehide', stopAndClear);
+  window.addEventListener('beforeunload', stopAndClear);
+
+  // 3. ボタンは演出用の再送トリガー(ページ遷移はしない)
+  btn.addEventListener('click', () => {
+    beat();
+    caption.textContent = '刻印を再送しました';
+    caption.classList.add('confirmed');
+    setTimeout(() => {
+      caption.textContent = '資料館サイトを開いていれば、そのまま反映されます';
+      caption.classList.remove('confirmed');
+    }, 2200);
+  });
+})();
+</script>
+
+</body>
+</html>
