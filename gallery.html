@@ -35,6 +35,44 @@
     font-family:'Inter', sans-serif;
     -webkit-font-smoothing:antialiased;
     padding:clamp(28px, 6vw, 64px) 20px 100px;
+    padding-top:calc(clamp(28px, 6vw, 64px) + 52px);
+  }
+
+  /* ---- サイト間ナビ ---- */
+  .site-nav{
+    position:fixed;
+    top:0; left:0; right:0;
+    display:flex;
+    justify-content:center;
+    gap:2px;
+    padding:14px 20px;
+    background:rgba(18,17,16,0.85);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+    z-index:20;
+  }
+
+  .site-nav a{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.1em;
+    text-decoration:none;
+    color:var(--marble-dim);
+    padding:6px 14px;
+    border-radius:20px;
+    transition:color 0.2s ease, background 0.2s ease;
+  }
+
+  .site-nav a:hover{ color:var(--marble); }
+
+  .site-nav a[aria-current="page"]{
+    color:var(--stone-950);
+    background:var(--bronze-bright);
+  }
+
+  .site-nav a:focus-visible{
+    outline:2px solid var(--patina);
+    outline-offset:3px;
   }
 
   header{
@@ -229,9 +267,9 @@
   /* ---- 認証トースト(別タブでの検知時のみ表示) ---- */
   #toast{
     position:fixed;
-    top:20px;
+    top:64px;
     left:50%;
-    transform:translate(-50%, -140%);
+    transform:translate(-50%, -160%);
     background:var(--stone-900);
     border:1px solid rgba(230,195,105,0.4);
     color:var(--marble);
@@ -269,6 +307,11 @@
 </style>
 </head>
 <body>
+
+  <nav class="site-nav" aria-label="サイト間ナビゲーション">
+    <a href="index.html">入館券サイト</a>
+    <a href="gallery.html" aria-current="page">資料館サイト</a>
+  </nav>
 
   <div id="toast" role="status" aria-live="polite">入館券サイトが開かれました — <span>特別収蔵室</span>を公開しました</div>
 
